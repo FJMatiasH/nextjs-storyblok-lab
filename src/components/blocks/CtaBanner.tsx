@@ -1,9 +1,5 @@
 import { storyblokEditable } from "@storyblok/react/rsc";
-
-type StoryblokLink = {
-  url?: string;
-  cached_url?: string;
-};
+import { resolveStoryblokHref, type StoryblokLink } from "@/lib/site";
 
 type CtaBannerBlock = {
   _uid: string;
@@ -11,16 +7,11 @@ type CtaBannerBlock = {
   title?: string;
   text?: string;
   button_text?: string;
-  button_link?: StoryblokLink | string;
+  button_link?: StoryblokLink;
 };
 
-function getHref(link: CtaBannerBlock["button_link"]): string | undefined {
-  if (typeof link === "string") return link;
-  return link?.url || link?.cached_url;
-}
-
 export default function CtaBanner({ blok }: { blok: CtaBannerBlock }) {
-  const href = getHref(blok.button_link);
+  const href = resolveStoryblokHref(blok.button_link);
 
   return (
     <section className="cta-banner" {...storyblokEditable(blok)}>

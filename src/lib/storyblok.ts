@@ -119,3 +119,48 @@ export async function fetchStory(
     );
   }
 }
+
+export type PublishedLink = {
+  fullSlug: string;
+  publishedAt?: string;
+};
+
+/** Every published story (folders excluded) from the Storyblok links endpoint. */
+export async function fetchPublishedLinks(): Promise<PublishedLink[]> {
+  if (!storyblokToken) {
+    throw new Error(
+      "Missing STORYBLOK_TOKEN. Set this environment variable to fetch Storyblok links.",
+    );
+  }
+
+  const perPage = 1000;
+
+  try {
+    const links = [];
+    // Large spaces are capped per request, so read page by page.
+    for (let page = 1; ; page++) {
+      const response = await getStoryblokApi().get("cdn/links", {
+        version: "published",
+        include_dates: 1,
+        paginated: 1,
+        per_page: perPage,
+        page,
+      });
+      const pageLinks = Object.values(response.data.links ?? {});
+      links.push(...pageLinks);
+      if (pageLinks.length < perPage) break;
+    }
+
+    return links.flatMap((link) =>
+      link.slug && !link.is_folder && link.published !== false
+        ? [{ fullSlug: link.slug, publishedAt: link.published_at }]
+        : [],
+    );
+  } catch (error: unknown) {
+    const details = getErrorDetails(error);
+    const status = details.status ? ` (HTTP ${details.status})` : "";
+    throw new Error(
+      `Failed to fetch Storyblok links${status}: ${details.message}`,
+    );
+  }
+}

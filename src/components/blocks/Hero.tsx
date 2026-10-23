@@ -1,10 +1,6 @@
 import Image from "next/image";
 import { storyblokEditable } from "@storyblok/react/rsc";
-
-type StoryblokLink = {
-  url?: string;
-  cached_url?: string;
-};
+import { resolveStoryblokHref, type StoryblokLink } from "@/lib/site";
 
 type HeroBlock = {
   _uid: string;
@@ -16,16 +12,11 @@ type HeroBlock = {
     alt?: string;
   };
   cta_text?: string;
-  cta_link?: StoryblokLink | string;
+  cta_link?: StoryblokLink;
 };
 
-function getHref(link: HeroBlock["cta_link"]): string | undefined {
-  if (typeof link === "string") return link;
-  return link?.url || link?.cached_url;
-}
-
 export default function Hero({ blok }: { blok: HeroBlock }) {
-  const href = getHref(blok.cta_link);
+  const href = resolveStoryblokHref(blok.cta_link);
   const imageSrc = blok.image?.filename;
   const imageAlt = blok.image?.alt?.trim();
   const hasImage = Boolean(imageSrc && imageAlt);

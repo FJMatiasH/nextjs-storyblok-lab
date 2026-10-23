@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import SiteFrame from "@/components/layout/SiteFrame";
 import { defaultLocale, isLocale } from "@/lib/i18n";
+import { getSiteUrl, siteDescriptions, siteName } from "@/lib/site";
 import "../globals.css";
 
+// Pages override title and description through generateMetadata.
 export const metadata: Metadata = {
-  title: "chargecloud",
-  description: "Discover simple, reliable EV charging with chargecloud.",
+  metadataBase: new URL(getSiteUrl()),
+  title: { default: siteName, template: `%s | ${siteName}` },
+  description: siteDescriptions[defaultLocale],
 };
 
 type LocaleLayoutProps = {
