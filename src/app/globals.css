@@ -312,6 +312,56 @@ img {
   color: var(--color-brand);
 }
 
+.button--outline {
+  background: var(--color-surface);
+  box-shadow: none;
+  color: var(--color-brand);
+}
+
+.button--outline:hover,
+.button--outline:active {
+  border-color: var(--color-brand-hover);
+  background: var(--color-brand-50);
+  color: var(--color-brand-hover);
+}
+
+/* Not found */
+.not-found {
+  width: min(100% - 2 * var(--gutter), 40rem);
+  margin-inline: auto;
+  padding-block: var(--space-9);
+  text-align: center;
+}
+
+.not-found__code {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: var(--text-display);
+  font-weight: 750;
+  line-height: 1;
+}
+
+.not-found h1 {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-heading);
+  line-height: 1.1;
+}
+
+.not-found p:not(.not-found__code) {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-muted);
+}
+
+.not-found__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* Feature grid */
 .feature-grid {
   padding-block: var(--space-8);

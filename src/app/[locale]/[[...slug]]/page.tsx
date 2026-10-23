@@ -2,7 +2,13 @@ import { Suspense } from "react";
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { StoryblokStory } from "@storyblok/react/rsc";
+import { isLocale, locales, toStoryblokSlug } from "@/lib/i18n";
 import { fetchStory } from "@/lib/storyblok";
+
+// Prerenders each locale home (/en, /es); other slugs render on request.
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 type PageProps = {
   params: Promise<{
@@ -38,11 +44,10 @@ async function StoryblokPage({
 }) {
   const { locale, slug } = await params;
 
-  if (locale !== "en" && locale !== "es") notFound();
+  if (!isLocale(locale)) notFound();
 
   await connection();
-  const storySlug = `${locale}/${slug?.join("/") || "home"}`;
-  const story = await fetchStory(storySlug);
+  const story = await fetchStory(toStoryblokSlug(locale, slug));
 
   if (!story) notFound();
 

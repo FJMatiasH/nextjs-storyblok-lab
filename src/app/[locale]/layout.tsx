@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import SiteFrame from "@/components/layout/SiteFrame";
+import { defaultLocale, isLocale } from "@/lib/i18n";
 import "../globals.css";
 
 export const metadata: Metadata = {
   title: "chargecloud",
   description: "Discover simple, reliable EV charging with chargecloud.",
 };
-
-export function generateStaticParams() {
-  return [{ locale: "en" }, { locale: "es" }];
-}
 
 type LocaleLayoutProps = {
   children: React.ReactNode;
@@ -23,7 +19,10 @@ export default async function LocaleLayout({
 }: LocaleLayoutProps) {
   const { locale } = await params;
 
-  if (locale !== "en" && locale !== "es") notFound();
+  // notFound() in this root layout would skip not-found.tsx and show Next's
+  // bare error page, so unknown locales (e.g. /fr) fall back to the default
+  // frame here and the page calls notFound().
+  const lang = isLocale(locale) ? locale : defaultLocale;
 
-  return <SiteFrame lang={locale}>{children}</SiteFrame>;
+  return <SiteFrame lang={lang}>{children}</SiteFrame>;
 }
