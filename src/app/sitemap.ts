@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { connection } from "next/server";
 import { isLocale } from "@/lib/i18n";
 import {
   getLocaleAlternates,
@@ -10,9 +9,7 @@ import {
 import { fetchPublishedLinks } from "@/lib/storyblok";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Built per request for now; the caching task should move this to "use cache".
-  await connection();
-
+  // Links are cached ("use cache") and revalidated by the Storyblok webhook.
   const siteUrl = getSiteUrl();
   const links = await fetchPublishedLinks();
   const publishedSlugs = new Set(links.map((link) => link.fullSlug));

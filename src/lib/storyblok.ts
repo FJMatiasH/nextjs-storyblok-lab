@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { cacheLife, cacheTag } from "next/cache";
 import {
   apiPlugin,
   storyblokInit,
@@ -24,6 +25,10 @@ function UnknownBlock({ blok }: { blok: SbBlokData }) {
 const getStoryblokApi = storyblokInit({
   accessToken: storyblokToken,
   use: [apiPlugin],
+  // Next's cache ("use cache") owns freshness. With the default cv "auto" the
+  // client re-sends the last cache version it saw, so a revalidated page would
+  // refetch the same stale CDN response.
+  apiOptions: { cache: { clear: "manual", type: "none", cv: "manual" } },
   enableFallbackComponent: true,
   customFallbackComponent: UnknownBlock,
   components: {
@@ -39,6 +44,17 @@ const getStoryblokApi = storyblokInit({
 type FetchStoryOptions = {
   preview?: boolean;
 };
+
+/** Published content is cached for an hour and refreshed early by the webhook. */
+const publishedCacheLife = { revalidate: 3600 };
+
+/** Tag of one story; the webhook revalidates it by the story's full_slug. */
+export function storyTag(fullSlug: string): string {
+  return `story:${fullSlug.replace(/^\/+|\/+$/g, "")}`;
+}
+
+/** Tag of the links list (sitemap, hreflang); any publish can change it. */
+export const linksTag = "storyblok:links";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -88,6 +104,24 @@ export async function fetchStory(
   slug: string,
   options: FetchStoryOptions = {},
 ): Promise<ISbStoryData | null> {
+  // Draft content must never be cached, so it skips the "use cache" layer.
+  return options.preview
+    ? requestStory(slug, { preview: true })
+    : fetchPublishedStory(slug);
+}
+
+async function fetchPublishedStory(slug: string): Promise<ISbStoryData | null> {
+  "use cache";
+  cacheLife(publishedCacheLife);
+  cacheTag(storyTag(slug));
+
+  return requestStory(slug, { preview: false });
+}
+
+async function requestStory(
+  slug: string,
+  options: FetchStoryOptions,
+): Promise<ISbStoryData | null> {
   const token = options.preview ? storyblokPreviewToken : storyblokToken;
   const tokenName = options.preview
     ? "STORYBLOK_PREVIEW_TOKEN"
@@ -127,6 +161,10 @@ export type PublishedLink = {
 
 /** Every published story (folders excluded) from the Storyblok links endpoint. */
 export async function fetchPublishedLinks(): Promise<PublishedLink[]> {
+  "use cache";
+  cacheLife(publishedCacheLife);
+  cacheTag(linksTag);
+
   if (!storyblokToken) {
     throw new Error(
       "Missing STORYBLOK_TOKEN. Set this environment variable to fetch Storyblok links.",

@@ -1,6 +1,5 @@
 import { cache, Suspense } from "react";
 import type { Metadata } from "next";
-import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { isLocale, locales, toStoryblokSlug } from "@/lib/i18n";
@@ -22,7 +21,9 @@ const getPublishedSlugs = cache(async (): Promise<Set<string>> => {
 
 // Prerenders each locale home (/en, /es); other slugs render on request.
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  // slug: [] is the locale root; without it slug stays unknown and even /en
+  // is served from the fallback shell.
+  return locales.map((locale) => ({ locale, slug: [] }));
 }
 
 type PageProps = {
@@ -38,7 +39,6 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
 
-  await connection();
   const [story, publishedSlugs] = await Promise.all([
     getStory(toStoryblokSlug(locale, slug)),
     getPublishedSlugs(),
@@ -77,7 +77,6 @@ async function StoryblokPage({
 
   if (!isLocale(locale)) notFound();
 
-  await connection();
   const story = await getStory(toStoryblokSlug(locale, slug));
 
   if (!story) notFound();
