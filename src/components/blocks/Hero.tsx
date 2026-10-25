@@ -40,10 +40,14 @@ export default function Hero({ blok }: { blok: HeroBlock }) {
           <Image
             src={imageSrc}
             alt={imageAlt}
+            // 16:10 matches the CSS aspect-ratio, so no layout shift.
             width={1200}
             height={750}
-            sizes="(min-width: 48rem) 50vw, 100vw"
-            priority
+            // Column width: full width minus 1rem gutters on mobile; half of
+            // the content (2rem gutters, 3rem gap) from 48rem; fixed from 80rem.
+            sizes="(min-width: 80rem) 584px, (min-width: 48rem) calc(50vw - 56px), calc(100vw - 32px)"
+            // The LCP image; `priority` is deprecated in Next 16.
+            preload
           />
         </div>
       )}
