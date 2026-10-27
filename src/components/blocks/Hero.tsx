@@ -15,7 +15,16 @@ type HeroBlock = {
   cta_link?: StoryblokLink;
 };
 
-export default function Hero({ blok }: { blok: HeroBlock }) {
+export default function Hero({
+  blok,
+  isPageHeading = true,
+}: {
+  blok: HeroBlock;
+  // Set by Page: only the first hero with a headline is the page's h1.
+  isPageHeading?: boolean;
+}) {
+  const headline = blok.headline?.trim();
+  const Heading = isPageHeading ? "h1" : "h2";
   const href = resolveStoryblokHref(blok.cta_link);
   const imageSrc = blok.image?.filename;
   const imageAlt = blok.image?.alt?.trim();
@@ -27,7 +36,7 @@ export default function Hero({ blok }: { blok: HeroBlock }) {
       {...storyblokEditable(blok)}
     >
       <div className="hero__content">
-        {blok.headline && <h1>{blok.headline}</h1>}
+        {headline && <Heading>{headline}</Heading>}
         {blok.text && <p>{blok.text}</p>}
         {href && blok.cta_text && (
           <a className="button" href={href}>

@@ -23,4 +23,24 @@ describe("Hero", () => {
       screen.getByRole("link", { name: "See plans" }),
     ).toHaveAttribute("href", "/en/plans");
   });
+
+  it("uses a level-2 heading when it is not the page heading", () => {
+    render(
+      <Hero
+        blok={{ _uid: "hero-2", headline: "Second hero" }}
+        isPageHeading={false}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Second hero" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
+  });
+
+  it("renders no heading for a blank headline", () => {
+    render(<Hero blok={{ _uid: "hero-3", headline: "   " }} />);
+
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+  });
 });

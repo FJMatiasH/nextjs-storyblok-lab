@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { StoryblokStory } from "@storyblok/react/rsc";
 import { isLocale, locales, toStoryblokSlug } from "@/lib/i18n";
+import { findHeadingHeroUid } from "@/lib/page-heading";
 import { buildPageMetadata, organizationJsonLd } from "@/lib/seo";
 import { fetchPublishedLinks, fetchStory } from "@/lib/storyblok";
 
@@ -54,26 +55,6 @@ export async function generateMetadata({
   return buildPageMetadata({ locale, slug, story, publishedSlugs });
 }
 
-function hasHeroHeading(content: unknown): boolean {
-  if (typeof content !== "object" || content === null || !("body" in content)) {
-    return false;
-  }
-
-  const body = content.body;
-  if (!Array.isArray(body)) return false;
-
-  return body.some(
-    (blok) =>
-      typeof blok === "object" &&
-      blok !== null &&
-      "component" in blok &&
-      blok.component === "hero" &&
-      "headline" in blok &&
-      typeof blok.headline === "string" &&
-      blok.headline.trim().length > 0,
-  );
-}
-
 // No Suspense boundary: notFound() must run before streaming starts, or the
 // response is committed as 200 and only gets a noindex tag (a soft 404).
 // The story comes from "use cache", so waiting for it costs little.
@@ -94,7 +75,7 @@ export default async function Page({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: organizationJsonLd(locale) }}
         />
       )}
-      {!hasHeroHeading(story.content) && (
+      {!findHeadingHeroUid(story.content?.body) && (
         <h1 className="visually-hidden">{story.name}</h1>
       )}
       <StoryblokStory story={story} />

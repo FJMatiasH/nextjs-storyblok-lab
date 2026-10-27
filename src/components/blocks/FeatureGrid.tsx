@@ -19,16 +19,19 @@ export default function FeatureGrid({ blok }: { blok: FeatureGridBlock }) {
     <section className="feature-grid" {...storyblokEditable(blok)}>
       {hasTitle && <h2>{blok.title}</h2>}
       {features.length > 0 && (
-        <div className="feature-grid__items" role="list">
+        // role="list": Safari drops list semantics when list-style is none.
+        // Each block is wrapped in an li, so any block type an editor drops
+        // into the grid is still a valid list item.
+        <ul className="feature-grid__items" role="list">
           {features.map((feature) => (
-            <StoryblokServerComponent
-              key={feature._uid}
-              blok={feature}
-              hasSectionTitle={hasTitle}
-              isInGrid
-            />
+            <li key={feature._uid}>
+              <StoryblokServerComponent
+                blok={feature}
+                hasSectionTitle={hasTitle}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </section>
   );

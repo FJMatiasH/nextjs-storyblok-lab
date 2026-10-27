@@ -94,6 +94,9 @@ describe("ContactForm", () => {
       screen.getByRole("textbox", { name: /^Message/ }),
     ).toHaveAccessibleDescription(t.messageRequired);
     expect(name).toHaveFocus();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "3 fields need attention.",
+    );
   });
 
   it("shows the Spanish errors on the Spanish page", async () => {
