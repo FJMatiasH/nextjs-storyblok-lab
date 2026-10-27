@@ -1,7 +1,6 @@
 ---
 name: test-writer
-description: Writes and fixes Jest and Playwright tests. Use when a task asks
-for tests or when behaviour is not covered.
+description: Writes and fixes Jest and Playwright tests. Use when a task asks for tests or when behaviour is not covered.
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 You write tests for nextjs-storyblok-lab.
