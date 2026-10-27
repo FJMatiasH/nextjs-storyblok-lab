@@ -180,7 +180,8 @@ img {
 /* Shared headings */
 .hero h1,
 .feature-grid h2,
-.cta-banner h2 {
+.cta-banner h2,
+.contact-form h2 {
   margin: 0;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -447,6 +448,113 @@ img {
   font-size: var(--text-lead);
 }
 
+/* Contact form */
+.contact-form {
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-block: var(--space-8);
+}
+
+.contact-form h2 {
+  font-size: var(--text-heading);
+}
+
+.contact-form__form {
+  position: relative;
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.contact-form__field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.contact-form__field label {
+  font-weight: 650;
+}
+
+.contact-form__required {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: 400;
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.contact-form__field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+/* Thicker border so the invalid state is not conveyed by colour alone. */
+.contact-form__field [aria-invalid="true"] {
+  border: 2px solid var(--color-error);
+}
+
+.contact-form__error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: var(--text-small);
+  font-weight: 650;
+}
+
+/* Honeypot: off-screen rather than display:none, which some bots skip. */
+.contact-form__trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-form__submit {
+  justify-self: start;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Pending: stays readable (on-brand on brand-hover, 10.94:1). */
+.contact-form__submit[aria-disabled="true"] {
+  border-color: var(--color-brand-hover);
+  background: var(--color-brand-hover);
+  box-shadow: none;
+  cursor: progress;
+}
+
+/* The status region stays in the DOM (see ContactForm); only results take space. */
+.contact-form__result {
+  margin: var(--space-5) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid;
+  border-radius: var(--radius-small);
+  font-weight: 650;
+}
+
+.contact-form__result--success {
+  border-color: var(--color-brand);
+  background: var(--color-brand-50);
+  color: var(--color-brand);
+}
+
+.contact-form__result--error {
+  border-color: var(--color-error);
+  background: var(--color-error-50);
+  color: var(--color-error);
+}
+
 /*
  * Sticky header only where it fits on one row and leaves room to read; on
  * narrow or short (zoomed) viewports it would wrap and hide focused content.
@@ -475,6 +583,11 @@ img {
 
   .hero::after {
     display: none;
+  }
+
+  /* System colours replace the red, so make the invalid border shape differ. */
+  .contact-form__field [aria-invalid="true"] {
+    border: 3px double;
   }
 }
 
@@ -517,7 +630,9 @@ img {
   }
 
   .button,
-  .language-nav a {
+  .language-nav a,
+  .contact-form__field input,
+  .contact-form__field textarea {
     transition-property: background-color, border-color, color, box-shadow,
       transform;
     transition-duration: var(--duration-fast);

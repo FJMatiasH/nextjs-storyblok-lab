@@ -15,6 +15,8 @@
  *   focus         on brand: 1.32 (fails) -> CTA band uses
  *   focus-on-brand (white) on brand                                      8.07
  *   border (decorative card/divider only, not a UI boundary)           1.29
+ *   error         on surface / surface-muted / error-50 (form errors)   6.57 /  6.15 /  6.05
+ *   error as invalid-field border on surface (UI)                     6.57
  *
  * The hero decoration never goes darker than brand-100, so brand-100 is the
  * worst-case pixel behind hero text.
@@ -37,6 +39,8 @@
   --color-border-strong: #7d8f85;
   --color-focus: #a54400;
   --color-focus-on-brand: #ffffff;
+  --color-error: #b42318;
+  --color-error-50: #fef3f2;
 
   /* Elevation */
   --shadow-sm: 0 1px 2px rgb(20 33 26 / 0.06), 0 1px 3px rgb(20 33 26 / 0.08);
