@@ -1,5 +1,6 @@
-# chargecloud Lab
-Marketing website of a fictional EV-charging company. Practice project that
+# nextjs-storyblok-lab
+Marketing website of Northlight, a fictional workflow platform for small
+teams. Practice project that
 mirrors a real stack: Next.js (App Router) + React + TypeScript, Storyblok as
 headless CMS, two locales (en, es).
 ## Commands
@@ -29,9 +30,7 @@ and spec disagree, ask me before changing either.
 messages.
 - Until the testing task is complete, run only `npm run lint` and
   `npm run build`.
-- After UI changes use the a11y-reviewer subagent. After SEO changes use seoProyecto chargecloud Lab: guía paso a paso
-Page 7 of 23
-reviewer. Before a pull request use code-reviewer.
+- After UI changes use the a11y-reviewer subagent. After SEO changes use seo-reviewer. Before a pull request use code-reviewer.
 - Explain what you changed and why in 3 to 5 lines. List anything you were
 unsure about.
 - Do not add dependencies without telling me why.

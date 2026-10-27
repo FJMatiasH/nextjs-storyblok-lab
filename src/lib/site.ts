@@ -1,10 +1,10 @@
 import { defaultLocale, locales, type Locale } from "@/lib/i18n";
 
-export const siteName = "chargecloud";
+export const siteName = "Northlight";
 
 export const siteDescriptions: Record<Locale, string> = {
-  en: "Discover simple, reliable EV charging with chargecloud.",
-  es: "Descubre una carga de vehículos eléctricos sencilla y fiable con chargecloud.",
+  en: "A bilingual demo site built with Next.js and Storyblok.",
+  es: "Un sitio de demostración bilingüe creado con Next.js y Storyblok.",
 };
 
 export const ogLocales: Record<Locale, string> = {

@@ -7,56 +7,8 @@ import {
   type ContactFormState,
   type ContactFormValues,
 } from "@/lib/contact";
-import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
-
-const messages = {
-  en: {
-    nameRequired: "Enter your name.",
-    nameTooLong: `Use ${contactLimits.name} characters or fewer for your name.`,
-    emailRequired: "Enter your email address.",
-    emailInvalid: "Enter an email address like name@example.com.",
-    emailTooLong: `Use ${contactLimits.email} characters or fewer for your email.`,
-    messageRequired: "Enter a message.",
-    messageTooLong: `Use ${contactLimits.message} characters or fewer for your message.`,
-    sendFailed:
-      "Your message could not be sent. Please try again in a few minutes.",
-  },
-  es: {
-    nameRequired: "Escribe tu nombre.",
-    nameTooLong: `Usa ${contactLimits.name} caracteres o menos para tu nombre.`,
-    emailRequired: "Escribe tu correo electrónico.",
-    emailInvalid: "Escribe un correo como nombre@ejemplo.com.",
-    emailTooLong: `Usa ${contactLimits.email} caracteres o menos para tu correo.`,
-    messageRequired: "Escribe un mensaje.",
-    messageTooLong: `Usa ${contactLimits.message} caracteres o menos para tu mensaje.`,
-    sendFailed:
-      "No se pudo enviar tu mensaje. Inténtalo de nuevo en unos minutos.",
-  },
-} satisfies Record<Locale, Record<string, string>>;
-
-function buildSchema(locale: Locale) {
-  const t = messages[locale];
-
-  return z.object({
-    name: z
-      .string()
-      .trim()
-      .min(1, t.nameRequired)
-      .max(contactLimits.name, t.nameTooLong),
-    // Trim and check length first; pipe() only runs z.email() on a clean value.
-    email: z
-      .string()
-      .trim()
-      .min(1, t.emailRequired)
-      .max(contactLimits.email, t.emailTooLong)
-      .pipe(z.email(t.emailInvalid)),
-    message: z
-      .string()
-      .trim()
-      .min(1, t.messageRequired)
-      .max(contactLimits.message, t.messageTooLong),
-  });
-}
+import { buildContactSchema, contactMessages } from "@/lib/contact-schema";
+import { defaultLocale, isLocale } from "@/lib/i18n";
 
 function readText(formData: FormData, name: string): string {
   const value = formData.get(name);
@@ -122,7 +74,7 @@ export async function submitContact(
     return { ok: true, submittedAt: Date.now() };
   }
 
-  const result = buildSchema(locale).safeParse({
+  const result = buildContactSchema(locale).safeParse({
     name: readText(formData, "name"),
     email: readText(formData, "email"),
     message: readText(formData, "message"),
@@ -146,7 +98,7 @@ export async function submitContact(
   if (!(await deliver(result.data))) {
     return {
       ok: false,
-      errors: { form: messages[locale].sendFailed },
+      errors: { form: contactMessages[locale].sendFailed },
       values,
       submittedAt: Date.now(),
     };

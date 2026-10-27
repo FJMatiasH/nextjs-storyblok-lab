@@ -4,7 +4,7 @@ description: Writes and fixes Jest and Playwright tests. Use when a task asks
 for tests or when behaviour is not covered.
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
-You write tests for chargecloud Lab.
+You write tests for nextjs-storyblok-lab.
 - Unit and component tests with Jest and React Testing Library: query by role
 and label, and test what the user sees and does.
 - E2E tests with Playwright for the main flows, including an axe

@@ -181,6 +181,7 @@ img {
 .hero h1,
 .feature-grid h2,
 .cta-banner h2,
+.cta-banner h3,
 .contact-form h2 {
   margin: 0;
   line-height: 1.1;
@@ -375,7 +376,8 @@ img {
 }
 
 .feature-grid h2,
-.cta-banner h2 {
+.cta-banner h2,
+.cta-banner h3 {
   font-size: var(--text-heading);
 }
 

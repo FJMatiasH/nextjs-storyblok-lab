@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Geist } from "next/font/google";
 import { localeLabels, locales, type Locale } from "@/lib/i18n";
+import { siteName } from "@/lib/site";
 
 // Self-hosted by next/font with a size-adjusted fallback, so the swap from
 // the fallback to Geist does not shift layout.
@@ -9,9 +10,20 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const frameLabels: Record<Locale, { skip: string; language: string }> = {
-  en: { skip: "Skip to main content", language: "Language" },
-  es: { skip: "Saltar al contenido principal", language: "Idioma" },
+const frameLabels: Record<
+  Locale,
+  { skip: string; language: string; footer: string }
+> = {
+  en: {
+    skip: "Skip to main content",
+    language: "Language",
+    footer: `${siteName}. Modern tools for small teams.`,
+  },
+  es: {
+    skip: "Saltar al contenido principal",
+    language: "Idioma",
+    footer: `${siteName}. Herramientas modernas para equipos pequeños.`,
+  },
 };
 
 export default function SiteFrame({
@@ -32,7 +44,7 @@ export default function SiteFrame({
         </a>
         <header className="site-header">
           <Link className="site-brand" href={`/${lang}`}>
-            chargecloud
+            {siteName}
           </Link>
           <nav aria-label={frameLabels[lang].language}>
             <ul className="language-nav">
@@ -53,7 +65,7 @@ export default function SiteFrame({
         </header>
         <main id="main-content">{children}</main>
         <footer className="site-footer">
-          <p>chargecloud — charging a brighter future.</p>
+          <p>{frameLabels[lang].footer}</p>
         </footer>
       </body>
     </html>

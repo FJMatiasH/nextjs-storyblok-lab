@@ -1,4 +1,4 @@
-# Product spec: chargecloud Lab
+# Product spec: nextjs-storyblok-lab
 ## Goal
 A fast, accessible, bilingual (en, es) marketing site that marketing can edit
 in Storyblok without developer help.
