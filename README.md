@@ -1,24 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nextjs-storyblok-lab
 
-## Getting Started
+Marketing site for **Northlight**, a fictional workflow platform for small
+teams. It is a bilingual (English and Spanish) demo built with Next.js (App
+Router), React, TypeScript and Storyblok as the headless CMS.
 
-First, run the development server:
+The specs in [`specs/`](specs/) are the source of truth for behaviour.
+
+## Getting started
+
+Requirements: Node.js 20.9 or later and access to the Storyblok space.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then fill in the values below
+npm run dev                  # http://localhost:3000 (redirects to /en)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Name | Required | Purpose |
+| --- | --- | --- |
+| `STORYBLOK_TOKEN` | yes | Public token; reads published content. |
+| `STORYBLOK_PREVIEW_TOKEN` | no | Preview token; reads draft content. Never cached. |
+| `NEXT_PUBLIC_SITE_URL` | in production | Absolute site URL for canonical links, hreflang, the sitemap and robots.txt. The production build fails without it. |
+| `REVALIDATE_SECRET` | for the webhook | Shared secret for `POST /api/revalidate` (see below). |
+| `CONTACT_API_URL` | no | Endpoint that receives contact form submissions as JSON. When empty, submissions are only logged on the server. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Never commit `.env.local`.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Development server. |
+| `npm run build` | Production build. |
+| `npm run start` | Serves the production build. |
+| `npm run lint` | ESLint. |
+| `npm test` | Jest and React Testing Library unit and component tests. |
+| `npm run test:e2e` | Playwright end-to-end tests with an axe accessibility check. Builds and starts the site on port 3100 and reads live Storyblok content through `.env.local`. Run `npx playwright install chromium` once first. |
+
+CI (`.github/workflows/ci.yml`) runs lint, unit tests, the build and the
+E2E tests on every pull request and on pushes to `main`. It needs the
+`STORYBLOK_TOKEN`, `STORYBLOK_PREVIEW_TOKEN` and `REVALIDATE_SECRET` repository
+secrets, and optionally the `NEXT_PUBLIC_SITE_URL` variable.
+
+## How it works
+
+- **Routes.** `src/app/[locale]/[[...slug]]/page.tsx` serves every page. `/en`
+  and `/es` load the Storyblok stories `en/home` and `es/home`; `/en/about`
+  loads `en/about`. `/` redirects to `/en`, and `/en/home` redirects to `/en`.
+  An unknown locale or story returns a real 404.
+- **Blocks.** Each Storyblok block maps to a component in
+  `src/components/blocks/`, registered in `src/lib/storyblok.ts`:
+  `page`, `hero`, `feature_grid`, `feature`, `cta_banner` and
+  `contact_form`. Unknown blocks render nothing in production and a warning in
+  development. See [`specs/02-content-model.md`](specs/02-content-model.md).
+- **SEO.** `src/lib/seo.ts` builds the metadata from the story's `seo_title`,
+  `seo_description` and `og_image` fields, with hreflang for both locales.
+  The home page adds Organization JSON-LD. `src/app/sitemap.ts` and
+  `src/app/robots.ts` cover the rest.
+- **Contact form.** A client component posts to a Server Action
+  (`src/app/actions/contact.ts`) that validates with zod, drops honeypot
+  spam and forwards to `CONTACT_API_URL`. It also works without JavaScript.
+- **Styles.** Plain CSS in `src/app/globals.css` with design tokens in
+  `src/styles/tokens.css`. The tokens file lists the contrast ratio of every
+  colour pair in use.
 
 ## Caching and the Storyblok webhook
 
@@ -87,17 +133,8 @@ Notes:
 - The secret travels in the URL, so it can appear in access logs. Rotate it if
   it leaks.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Any host that runs a Node.js Next.js server works (for example Vercel). Set
+the environment variables above in the host, then configure the Storyblok
+webhook so published changes appear without a redeploy.
