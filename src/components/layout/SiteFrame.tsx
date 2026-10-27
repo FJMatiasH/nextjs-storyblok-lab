@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { localeLabels, locales, type Locale } from "@/lib/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,22 +12,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const locales = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Español" },
-] as const;
-
-const frameLabels = {
+const frameLabels: Record<Locale, { skip: string; language: string }> = {
   en: { skip: "Skip to main content", language: "Language" },
   es: { skip: "Saltar al contenido principal", language: "Idioma" },
-} as const;
+};
 
 export default function SiteFrame({
   children,
   lang,
 }: {
   children: React.ReactNode;
-  lang: "en" | "es";
+  lang: Locale;
 }) {
   return (
     <html
@@ -44,14 +40,14 @@ export default function SiteFrame({
           <nav aria-label={frameLabels[lang].language}>
             <ul className="language-nav">
               {locales.map((locale) => (
-                <li key={locale.code}>
+                <li key={locale}>
                   <Link
-                    href={`/${locale.code}`}
-                    hrefLang={locale.code}
-                    lang={locale.code}
-                    aria-current={locale.code === lang ? "true" : undefined}
+                    href={`/${locale}`}
+                    hrefLang={locale}
+                    lang={locale}
+                    aria-current={locale === lang ? "true" : undefined}
                   >
-                    {locale.label}
+                    {localeLabels[locale]}
                   </Link>
                 </li>
               ))}
