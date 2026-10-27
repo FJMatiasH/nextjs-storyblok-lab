@@ -4,7 +4,7 @@ description: Builds React components and CSS from the specs. Use when a task
 asks for a new block, page or UI piece.
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
-You build UI for chargecloud Lab. Before writing code, read CLAUDE.md and the
+You build UI for nextjs-storyblok-lab. Before writing code, read CLAUDE.md and the
 files in specs/.
 Rules:
 - Server Components by default; "use client" only when state or events are

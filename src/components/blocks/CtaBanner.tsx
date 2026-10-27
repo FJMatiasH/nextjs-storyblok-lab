@@ -10,12 +10,22 @@ type CtaBannerBlock = {
   button_link?: StoryblokLink;
 };
 
-export default function CtaBanner({ blok }: { blok: CtaBannerBlock }) {
+export default function CtaBanner({
+  blok,
+  hasSectionTitle = false,
+  isInGrid = false,
+}: {
+  blok: CtaBannerBlock;
+  // Set by FeatureGrid when an editor places the banner among its features.
+  hasSectionTitle?: boolean;
+  isInGrid?: boolean;
+}) {
   const href = resolveStoryblokHref(blok.button_link);
+  const Heading = hasSectionTitle ? "h3" : "h2";
 
-  return (
+  const section = (
     <section className="cta-banner" {...storyblokEditable(blok)}>
-      {blok.title && <h2>{blok.title}</h2>}
+      {blok.title && <Heading>{blok.title}</Heading>}
       {blok.text && <p>{blok.text}</p>}
       {href && blok.button_text && (
         <a className="button button--secondary" href={href}>
@@ -24,4 +34,8 @@ export default function CtaBanner({ blok }: { blok: CtaBannerBlock }) {
       )}
     </section>
   );
+
+  // A section is not a valid child of role="list", so wrap it when the banner
+  // was placed inside a feature grid.
+  return isInGrid ? <div role="listitem">{section}</div> : section;
 }

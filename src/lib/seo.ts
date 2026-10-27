@@ -69,7 +69,7 @@ export function buildPageMetadata({
   alternates[locale] = canonical;
 
   return {
-    // Absolute on home so it is not "chargecloud | chargecloud".
+    // Absolute on home so it is not "Northlight | Northlight".
     title: isHome && !seoTitle ? { absolute: title } : title,
     description,
     alternates: {
