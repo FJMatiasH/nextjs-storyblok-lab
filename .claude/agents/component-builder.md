@@ -1,7 +1,6 @@
 ---
 name: component-builder
-description: Builds React components and CSS from the specs. Use when a task
-asks for a new block, page or UI piece.
+description: Builds React components and CSS from the specs. Use when a task asks for a new block, page or UI piece.
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 You build UI for nextjs-storyblok-lab. Before writing code, read CLAUDE.md and the
