@@ -1,4 +1,4 @@
-import { cache, Suspense } from "react";
+import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { StoryblokStory } from "@storyblok/react/rsc";
@@ -18,6 +18,12 @@ const getPublishedSlugs = cache(async (): Promise<Set<string>> => {
     return new Set();
   }
 });
+
+// Every page is built from cached Storyblok data, so the whole route can be
+// static. It also makes the first request for an unlisted slug wait for the
+// finished page instead of streaming a fallback shell with a 200 status, so
+// notFound() still sends a real 404.
+export const ensureStatic = "navigation";
 
 // Prerenders each locale home (/en, /es); other slugs render on request.
 export function generateStaticParams() {
@@ -68,11 +74,10 @@ function hasHeroHeading(content: unknown): boolean {
   );
 }
 
-async function StoryblokPage({
-  params,
-}: {
-  params: PageProps["params"];
-}) {
+// No Suspense boundary: notFound() must run before streaming starts, or the
+// response is committed as 200 and only gets a noindex tag (a soft 404).
+// The story comes from "use cache", so waiting for it costs little.
+export default async function Page({ params }: PageProps) {
   const { locale, slug } = await params;
 
   if (!isLocale(locale)) notFound();
@@ -94,19 +99,5 @@ async function StoryblokPage({
       )}
       <StoryblokStory story={story} />
     </div>
-  );
-}
-
-export default function Page({ params }: PageProps) {
-  return (
-    <Suspense
-      fallback={
-        <p className="story-page" role="status">
-          Loading page content...
-        </p>
-      }
-    >
-      <StoryblokPage params={params} />
-    </Suspense>
   );
 }
