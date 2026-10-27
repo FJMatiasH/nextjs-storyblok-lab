@@ -1,16 +1,48 @@
+/*
+ * Design tokens for chargecloud Lab.
+ *
+ * WCAG 2.x contrast ratios (relative luminance) for every pair in use.
+ * Text needs >= 4.5:1, UI components and focus rings >= 3:1.
+ *
+ *   text          on surface / surface-muted / brand-50 / brand-100  16.64 / 15.56 / 15.26 / 13.68
+ *   text-muted    on surface / surface-muted / brand-50 / brand-100   8.03 /  7.51 /  7.36 /  6.60
+ *   brand         on surface / surface-muted / brand-50 / brand-100   8.07 /  7.55 /  7.40 /  6.63
+ *   brand-hover   on brand-50 (secondary button hover)               10.03
+ *   on-brand      on brand / brand-hover (buttons, CTA band)           8.07 / 10.94
+ *   brand icon    on brand-100 (icon chip, UI)                          6.63
+ *   border-strong on surface / surface-muted (UI outline)             3.42 /  3.20
+ *   focus         on surface / surface-muted / brand-50 / brand-100   6.13 /  5.73 /  5.62 /  5.04
+ *   focus         on brand: 1.32 (fails) -> CTA band uses
+ *   focus-on-brand (white) on brand                                      8.07
+ *   border (decorative card/divider only, not a UI boundary)           1.29
+ *
+ * The hero decoration never goes darker than brand-100, so brand-100 is the
+ * worst-case pixel behind hero text.
+ */
 :root {
   color-scheme: light;
-  --color-brand: #075c3b;
-  --color-brand-hover: #064a31;
-  --color-on-brand: #ffffff;
-  --color-text: #17231d;
-  --color-text-muted: #43524a;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f1f6f3;
-  --color-surface-accent: #e6f2eb;
-  --color-border: #c9d7ce;
-  --color-focus: #a54400;
 
+  /* Colour */
+  --color-brand: #075c3b;
+  --color-brand-hover: #05462d;
+  --color-brand-50: #eff7f2;
+  --color-brand-100: #d9eee1;
+  --color-brand-200: #b5dcc4;
+  --color-on-brand: #ffffff;
+  --color-text: #14211a;
+  --color-text-muted: #44544b;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f8f6;
+  --color-border: #dce5df;
+  --color-border-strong: #7d8f85;
+  --color-focus: #a54400;
+  --color-focus-on-brand: #ffffff;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgb(20 33 26 / 0.06), 0 1px 3px rgb(20 33 26 / 0.08);
+  --shadow-md: 0 4px 8px rgb(20 33 26 / 0.06), 0 10px 24px rgb(20 33 26 / 0.1);
+
+  /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -21,15 +53,30 @@
   --space-8: 4rem;
   --space-9: 5rem;
   --space-10: 6rem;
+  --space-11: 8rem;
 
+  /* Type scale */
+  --text-small: 0.875rem;
   --text-body: 1rem;
   --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
   --text-title: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
   --text-heading: clamp(1.875rem, 1.4rem + 2.4vw, 3rem);
-  --text-display: clamp(2.5rem, 1.6rem + 4.5vw, 5rem);
+  --text-display: clamp(2.75rem, 1.7rem + 5vw, 5.5rem);
 
+  /* Radius */
   --radius-small: 0.25rem;
   --radius-medium: 0.5rem;
   --radius-large: 1rem;
+  --radius-xlarge: 1.5rem;
+  --radius-pill: 999px;
+
+  /* Motion (only applied inside prefers-reduced-motion: no-preference) */
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Layout */
   --content-width: 76rem;
+  --gutter: var(--space-4);
+  --header-height: 5rem;
 }

@@ -11,6 +11,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const locales = [
+  { code: "en", label: "English" },
+  { code: "es", label: "Español" },
+] as const;
+
+const frameLabels = {
+  en: { skip: "Skip to main content", language: "Language" },
+  es: { skip: "Saltar al contenido principal", language: "Idioma" },
+} as const;
+
 export default function SiteFrame({
   children,
   lang,
@@ -25,24 +35,26 @@ export default function SiteFrame({
     >
       <body>
         <a className="skip-link" href="#main-content">
-          Skip to main content
+          {frameLabels[lang].skip}
         </a>
         <header className="site-header">
-          <Link className="site-brand" href="/en">
+          <Link className="site-brand" href={`/${lang}`}>
             chargecloud
           </Link>
-          <nav aria-label="Language">
+          <nav aria-label={frameLabels[lang].language}>
             <ul className="language-nav">
-              <li>
-                <Link href="/en" hrefLang="en" lang="en">
-                  English
-                </Link>
-              </li>
-              <li>
-                <Link href="/es" hrefLang="es" lang="es">
-                  Español
-                </Link>
-              </li>
+              {locales.map((locale) => (
+                <li key={locale.code}>
+                  <Link
+                    href={`/${locale.code}`}
+                    hrefLang={locale.code}
+                    lang={locale.code}
+                    aria-current={locale.code === lang ? "true" : undefined}
+                  >
+                    {locale.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </header>

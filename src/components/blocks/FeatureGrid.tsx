@@ -12,16 +12,20 @@ type FeatureGridBlock = {
 };
 
 export default function FeatureGrid({ blok }: { blok: FeatureGridBlock }) {
+  const hasTitle = Boolean(blok.title?.trim());
+  const features = blok.features ?? [];
+
   return (
     <section className="feature-grid" {...storyblokEditable(blok)}>
-      {blok.title && <h2>{blok.title}</h2>}
-      {blok.features && blok.features.length > 0 && (
+      {hasTitle && <h2>{blok.title}</h2>}
+      {features.length > 0 && (
         <div className="feature-grid__items" role="list">
-          {blok.features.map((feature) => (
+          {features.map((feature) => (
             <StoryblokServerComponent
               key={feature._uid}
               blok={feature}
-              hasSectionTitle={Boolean(blok.title?.trim())}
+              hasSectionTitle={hasTitle}
+              isInGrid
             />
           ))}
         </div>

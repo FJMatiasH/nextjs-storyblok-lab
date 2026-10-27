@@ -27,7 +27,7 @@ export default function CtaBanner({ blok }: { blok: CtaBannerBlock }) {
       {blok.title && <h2>{blok.title}</h2>}
       {blok.text && <p>{blok.text}</p>}
       {href && blok.button_text && (
-        <a className="button" href={href}>
+        <a className="button button--secondary" href={href}>
           {blok.button_text}
         </a>
       )}

@@ -6,9 +6,11 @@ import {
   type ISbStoryData,
 } from "@storyblok/react/rsc";
 import CtaBanner from "@/components/blocks/CtaBanner";
+import ContactForm from "@/components/blocks/ContactForm";
 import Feature from "@/components/blocks/Feature";
 import FeatureGrid from "@/components/blocks/FeatureGrid";
 import Hero from "@/components/blocks/Hero";
+import Page from "@/components/blocks/Page";
 
 const storyblokToken = process.env.STORYBLOK_TOKEN?.trim();
 const storyblokPreviewToken = process.env.STORYBLOK_PREVIEW_TOKEN?.trim();
@@ -25,10 +27,12 @@ const getStoryblokApi = storyblokInit({
   enableFallbackComponent: true,
   customFallbackComponent: UnknownBlock,
   components: {
+    page: Page,
     hero: Hero,
     feature_grid: FeatureGrid,
     feature: Feature,
     cta_banner: CtaBanner,
+    contact_form: ContactForm,
   },
 });
 

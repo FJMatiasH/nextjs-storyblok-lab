@@ -28,9 +28,13 @@ export default function Hero({ blok }: { blok: HeroBlock }) {
   const href = getHref(blok.cta_link);
   const imageSrc = blok.image?.filename;
   const imageAlt = blok.image?.alt?.trim();
+  const hasImage = Boolean(imageSrc && imageAlt);
 
   return (
-    <section className="hero" {...storyblokEditable(blok)}>
+    <section
+      className={hasImage ? "hero hero--with-image" : "hero"}
+      {...storyblokEditable(blok)}
+    >
       <div className="hero__content">
         {blok.headline && <h1>{blok.headline}</h1>}
         {blok.text && <p>{blok.text}</p>}
