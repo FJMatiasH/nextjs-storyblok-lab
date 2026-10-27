@@ -8,7 +8,7 @@
 - Product: a fictional workflow platform for small teams (generic, not tied to any industry).
 
 ## Goal
-Remove every reference to the company chargecloud and to the EV-charging theme. The project becomes a generic, bilingual (en, es) marketing demo site built with Next.js and Storyblok. Change names and copy only. Do not change behaviour, structure, routes, props, CSS or dependencies.
+Remove every reference to the previous company name and to the EV-charging theme. The project becomes a generic, bilingual (en, es) marketing demo site built with Next.js and Storyblok. Change names and copy only. Do not change behaviour, structure, routes, props, CSS or dependencies.
 
 ## What to change
 - package.json "name" and the matching name fields in package-lock.json.
