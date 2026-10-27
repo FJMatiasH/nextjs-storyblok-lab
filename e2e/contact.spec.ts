@@ -35,7 +35,9 @@ test("submitting the empty form shows an error for each field", async ({
   await expect(
     form.getByRole("textbox", { name: /^Message/ }),
   ).toHaveAccessibleDescription("Enter a message.");
-  await expect(form.getByRole("status")).toBeEmpty();
+  await expect(form.getByRole("status")).toHaveText(
+    "3 fields need attention.",
+  );
 });
 
 test("a valid submission shows the success message", async ({ page }) => {

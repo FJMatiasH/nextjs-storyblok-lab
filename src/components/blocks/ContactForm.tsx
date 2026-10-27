@@ -34,6 +34,10 @@ const copy = {
     pending: "Sending…",
     success: "Thank you. Your message has been sent.",
     required: "(required)",
+    invalidFields: (count: number) =>
+      count === 1
+        ? "1 field needs attention."
+        : `${count} fields need attention.`,
     honeypot: "Leave this field empty",
     labels: { name: "Name", email: "Email", message: "Message" },
   },
@@ -43,6 +47,10 @@ const copy = {
     pending: "Enviando…",
     success: "Gracias. Tu mensaje se ha enviado.",
     required: "(obligatorio)",
+    invalidFields: (count: number) =>
+      count === 1
+        ? "Hay 1 campo que revisar."
+        : `Hay ${count} campos que revisar.`,
     honeypot: "Deja este campo vacío",
     labels: { name: "Nombre", email: "Correo electrónico", message: "Mensaje" },
   },
@@ -57,12 +65,10 @@ function text(value: string | undefined, fallback: string): string {
 export default function ContactForm({
   blok,
   hasSectionTitle = false,
-  isInGrid = false,
 }: {
   blok: ContactFormBlock;
   // Set by FeatureGrid when an editor places the form among its features.
   hasSectionTitle?: boolean;
-  isInGrid?: boolean;
 }) {
   const params = useParams<{ locale?: string }>();
   const locale =
@@ -88,10 +94,13 @@ export default function ContactForm({
 
   const errors = state?.ok === false ? state.errors : {};
   const values = state?.ok === false ? state.values : undefined;
+  const invalidCount = fields.filter((field) => errors[field]).length;
 
-  // After each submission, focus the first invalid field. Success and send
-  // failures are announced by the live region only (focusing them too would
-  // read them twice).
+  // After each submission, focus the first invalid field; the live region
+  // also announces how many fields need attention, in case focus does not
+  // move (the first invalid field already had it). Success and send failures
+  // are announced by the live region only (focusing them too would read
+  // them twice).
   useEffect(() => {
     if (!state || state.ok) return;
 
@@ -105,7 +114,7 @@ export default function ContactForm({
     if (isPending) event.preventDefault();
   }
 
-  const section = (
+  return (
     <section
       id={anchorId}
       className="contact-form"
@@ -199,6 +208,12 @@ export default function ContactForm({
           on a later submission is announced again. */}
       <div role="status" aria-live="polite" className="contact-form__status">
         {isPending && <span className="visually-hidden">{t.pending}</span>}
+        {/* Hidden: the errors are already shown next to each field. */}
+        {!isPending && invalidCount > 0 && (
+          <p key={state?.submittedAt} className="visually-hidden">
+            {t.invalidFields(invalidCount)}
+          </p>
+        )}
         {!isPending && state?.ok === true && (
           <p
             key={state.submittedAt}
@@ -218,8 +233,4 @@ export default function ContactForm({
       </div>
     </section>
   );
-
-  // A section is not a valid child of role="list", so wrap it when the form
-  // was placed inside a feature grid.
-  return isInGrid ? <div role="listitem">{section}</div> : section;
 }

@@ -8,7 +8,6 @@ type FeatureBlock = {
   text?: string;
   icon?: string;
   hasSectionTitle?: boolean;
-  isInGrid?: boolean;
 };
 
 const icons = {
@@ -41,20 +40,14 @@ function getIcon(name?: string): ReactNode {
 export default function Feature({
   blok,
   hasSectionTitle = false,
-  isInGrid = false,
 }: {
   blok: FeatureBlock;
   hasSectionTitle?: boolean;
-  isInGrid?: boolean;
 }) {
   const icon = getIcon(blok.icon);
 
   return (
-    <article
-      className="feature"
-      role={isInGrid ? "listitem" : undefined}
-      {...storyblokEditable(blok)}
-    >
+    <article className="feature" {...storyblokEditable(blok)}>
       {icon && (
         <span className="feature__icon">
           <svg

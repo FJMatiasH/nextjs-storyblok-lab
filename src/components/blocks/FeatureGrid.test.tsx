@@ -53,10 +53,9 @@ describe("FeatureGrid", () => {
     const list = screen.getByRole("list");
     const items = within(list).getAllByRole("listitem");
     expect(items).toHaveLength(features.length + 1);
-    // Every direct child of the list must be a list item (axe
-    // aria-required-children).
+    // Every direct child of the list must be a list item (axe list rule).
     Array.from(list.children).forEach((child) => {
-      expect(child).toHaveAttribute("role", "listitem");
+      expect(child.tagName).toBe("LI");
     });
     expect(
       within(items[features.length]).getByRole("heading", {

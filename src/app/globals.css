@@ -179,10 +179,12 @@ img {
 
 /* Shared headings */
 .hero h1,
+.hero h2,
 .feature-grid h2,
 .cta-banner h2,
 .cta-banner h3,
-.contact-form h2 {
+.contact-form h2,
+.contact-form h3 {
   margin: 0;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -240,7 +242,9 @@ img {
   max-width: 48rem;
 }
 
-.hero h1 {
+/* A second hero on the page renders h2 but looks the same. */
+.hero h1,
+.hero h2 {
   max-width: 16ch;
   color: var(--color-brand);
   font-size: var(--text-display);
@@ -384,7 +388,9 @@ img {
 .feature-grid__items {
   display: grid;
   gap: var(--space-5);
-  margin-top: var(--space-7);
+  margin: var(--space-7) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .feature {
@@ -444,6 +450,20 @@ img {
   color: var(--color-on-brand);
 }
 
+/*
+ * Inside a feature grid the banner is a card: the full-bleed band would paint
+ * over the cards earlier in its row.
+ */
+.feature-grid__items .cta-banner {
+  height: 100%;
+  margin: 0;
+  padding: var(--space-6);
+  /* Longhand: the minifier empties "border-image: none" (see forced-colors). */
+  border-image-source: none;
+  border-radius: var(--radius-large);
+  background: var(--color-brand);
+}
+
 .cta-banner p {
   max-width: 60ch;
   margin-block: var(--space-4) var(--space-6);
@@ -457,7 +477,9 @@ img {
   padding-block: var(--space-8);
 }
 
-.contact-form h2 {
+/* h3 when the form sits inside a titled feature grid. */
+.contact-form h2,
+.contact-form h3 {
   font-size: var(--text-heading);
 }
 
@@ -578,9 +600,11 @@ img {
     text-decoration-thickness: 2px;
   }
 
+  /* Longhand on purpose: the CSS minifier turns "border-image: none" into an
+     empty, invalid declaration. */
   .hero::before,
   .cta-banner {
-    border-image: none;
+    border-image-source: none;
   }
 
   .hero::after {
