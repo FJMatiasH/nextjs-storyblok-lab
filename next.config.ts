@@ -14,10 +14,16 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // Storyblok's image service does the resizing (see the loader file).
+    loader: "custom",
+    loaderFile: "./src/lib/storyblok-image-loader.ts",
+    // Only read by the default loader; kept so switching back stays limited
+    // to Storyblok assets.
     remotePatterns: [
       {
         protocol: "https",
         hostname: "a.storyblok.com",
+        pathname: "/f/**",
       },
     ],
   },

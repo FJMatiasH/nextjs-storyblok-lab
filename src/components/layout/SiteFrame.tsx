@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { localeLabels, locales, type Locale } from "@/lib/i18n";
 
+// Self-hosted by next/font with a size-adjusted fallback, so the swap from
+// the fallback to Geist does not shift layout.
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -27,7 +24,7 @@ export default function SiteFrame({
   return (
     <html
       lang={lang}
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={geistSans.variable}
     >
       <body>
         <a className="skip-link" href="#main-content">
