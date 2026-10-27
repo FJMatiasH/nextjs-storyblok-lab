@@ -7,13 +7,13 @@ headless CMS, two locales (en, es).
 - npm run dev: start the dev server
 - npm run build: production build
 - npm run lint: ESLint
-- `npm test` is not available until the testing task is complete.
+- npm test: Jest unit and component tests
 - npm run test:e2e: Playwright end-to-end tests
 ## Stack and rules
 - Next.js App Router. Server Components by default; add "use client" only for
 interactive parts.
 - TypeScript strict. No "any" without a comment explaining why.
-- Plain CSS with design tokens in src/styles/tokens.css. No Tailwind, no CSSin-JS.
+- Plain CSS with design tokens in src/styles/tokens.css. No Tailwind, no CSS-in-JS.
 - Mobile-first and accessible (WCAG 2.2 AA): semantic HTML, visible focus,
 labels, alt text, contrast 4.5:1.
 - Storyblok SDK: import from "@storyblok/react/rsc". Every block component is
@@ -28,8 +28,8 @@ and spec disagree, ask me before changing either.
 ## Workflow
 - One git branch per task (feat/..., fix/...). Small commits with clear
 messages.
-- Until the testing task is complete, run only `npm run lint` and
-  `npm run build`.
+- Run `npm run lint`, `npm test` and `npm run build` before every commit.
+  Run `npm run test:e2e` after UI, routing or content-model changes.
 - After UI changes use the a11y-reviewer subagent. After SEO changes use seo-reviewer. Before a pull request use code-reviewer.
 - Explain what you changed and why in 3 to 5 lines. List anything you were
 unsure about.
