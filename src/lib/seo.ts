@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ISbStoryData } from "@storyblok/react/rsc";
-import { locales, type Locale } from "@/lib/i18n";
+import { defaultLocale, locales, type Locale } from "@/lib/i18n";
 import {
   getLocaleAlternates,
   getSiteUrl,
@@ -106,7 +106,8 @@ export function organizationJsonLd(locale: Locale): string {
     // One entity for both locale home pages.
     "@id": `${siteUrl}/#organization`,
     name: siteName,
-    url: siteUrl,
+    // "/" redirects to the default locale, so point at the page it lands on.
+    url: `${siteUrl}/${defaultLocale}`,
     description: siteDescriptions[locale],
   };
 
