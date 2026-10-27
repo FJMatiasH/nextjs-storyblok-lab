@@ -16,17 +16,14 @@ export default function Page({ blok }: { blok: PageBlock }) {
 
   return (
     <div {...storyblokEditable(blok)}>
-      {blok.body?.map((child) =>
-        child.component === "hero" ? (
-          <StoryblokServerComponent
-            key={child._uid}
-            blok={child}
-            isPageHeading={child._uid === headingHeroUid}
-          />
-        ) : (
-          <StoryblokServerComponent key={child._uid} blok={child} />
-        ),
-      )}
+      {blok.body?.map((child) => (
+        <StoryblokServerComponent
+          key={child._uid}
+          blok={child}
+          // Only Hero reads it; other blocks ignore unknown props.
+          isPageHeading={child._uid === headingHeroUid}
+        />
+      ))}
     </div>
   );
 }

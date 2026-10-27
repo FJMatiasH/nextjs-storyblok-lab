@@ -183,7 +183,8 @@ img {
 .feature-grid h2,
 .cta-banner h2,
 .cta-banner h3,
-.contact-form h2 {
+.contact-form h2,
+.contact-form h3 {
   margin: 0;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -476,7 +477,9 @@ img {
   padding-block: var(--space-8);
 }
 
-.contact-form h2 {
+/* h3 when the form sits inside a titled feature grid. */
+.contact-form h2,
+.contact-form h3 {
   font-size: var(--text-heading);
 }
 

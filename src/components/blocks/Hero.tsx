@@ -17,10 +17,11 @@ type HeroBlock = {
 
 export default function Hero({
   blok,
-  isPageHeading = true,
+  isPageHeading = false,
 }: {
   blok: HeroBlock;
-  // Set by Page: only the first hero with a headline is the page's h1.
+  // Set by Page for the first top-level hero with a headline; any other hero
+  // (including one nested in a grid) renders h2, so a page never gets two h1s.
   isPageHeading?: boolean;
 }) {
   const headline = blok.headline?.trim();
